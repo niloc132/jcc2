@@ -1,0 +1,5 @@
+javac -classpath ../gwtproject/gwt/build/lib/gwt-dev.jar JccMain.java
+
+java -cp ../gwtproject/gwt/build/lib/gwt-dev.jar:. JccMain
+
+
