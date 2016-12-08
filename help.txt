@@ -1,0 +1,132 @@
+menu
+Status #postgresqlX ##gwtX #go-nutsX #kotlinX ##javaX
+##gwt: GWT is tasty, get yours at: http://www.gwtproject.org/download.html
+[23:06] == adlaistevenson [443c3c49@gateway/web/freenode/ip.68.60.60.73] has joined ##gwt
+[23:06] -ChanServ- [##gwt] Welcome to the unofficial Google Web Toolkit channel on freenode. This is a starting (and growing) community, and we need your help. Stick around!
+[23:06] <adlaistevenson> Finally, back to GWT.
+[23:07] <adlaistevenson> Operations and normal work keep getting in the way. :-(
+[00:15] == lukaszx0 [sid2084@gateway/web/irccloud.com/x-xegczdjtiibhqnjf] has quit [Ping timeout: 260 seconds]
+[00:16] == yawkat [~yawkat@cats.coffee] has quit [Ping timeout: 260 seconds]
+[00:16] == lukaszx0 [sid2084@gateway/web/irccloud.com/x-ephuoiqknewjgvuh] has joined ##gwt
+[00:17] <niloc132> adlaistevenson: my job would be great if it wasnt for those pesky customers
+[00:22] <adlaistevenson> Yeah, if we just had to pass QA we'd have plenty of time to complete our projects.
+[00:22] <niloc132> haha
+[00:22] <niloc132> on behalf of your QA, ouch (or your users, i'm not sure which)
+[00:23] <adlaistevenson> Unfortunately, I can't be Wally either (org is too small): http://dilbert.com/strip/2016-07-30
+[00:23] <javabot> adlaistevenson's title: "Wally And Agile Programming - Dilbert Comic Strip on 2016-07-30 | Dilbert by Scott Adams"
+[00:23] == yawkat [~yawkat@cats.coffee] has joined ##gwt
+[00:24] <adlaistevenson> Customers are pretty much beta testers here.
+[00:25] <niloc132> ah, so google eh?
+[00:25] <adlaistevenson> No :-)
+[00:34] <adlaistevenson> Argh, can't resolve import "com.google.gwt.thirdparty.json"
+[00:36] <adlaistevenson> Could "com.google.gwt.thirdparty.json.JSONArray" be an alias to ./gwt/user/src/com/google/gwt/json/client/JSONArray.java?
+[00:57] == hextileX [~Thunderbi@xdsl-213-196-226-152.netcologne.de] has quit [Ping timeout: 260 seconds]
+[01:22] <adlaistevenson> Resolved, apparently it is.
+[01:30] <adlaistevenson> Getting GWT to compile from a Makefile isn't easy, but I am down to 12 errors.
+[01:33] <adlaistevenson> https://paste.fedoraproject.org/500875/10923691/
+[01:33] <javabot> adlaistevenson's title: "#500875  Fedora Project Pastebin"
+[03:07] == Smiche [~Smiche@mobile-access-5d6ab6-121.dhcp.inet.fi] has joined ##gwt
+[03:16] == SJr [~sjr@S0106c43dc7a31386.vf.shawcable.net] has quit [Ping timeout: 260 seconds]
+[03:19] == Smiche_ [~Smiche@mobile-access-5d6ab6-121.dhcp.inet.fi] has joined ##gwt
+[03:22] == SJr [~sjr@S0106c43dc7a31386.vf.shawcable.net] has joined ##gwt
+[03:22] == Smiche [~Smiche@mobile-access-5d6ab6-121.dhcp.inet.fi] has quit [Ping timeout: 260 seconds]
+[04:07] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has joined ##gwt
+[05:39] == Peste_Bubonica [~Peste_Bub@152.250.88.234] has joined ##gwt
+[06:00] <Smiche_> someone has a way of generating cpu load in app engine?
+[06:00] <Smiche_> trying to benchmark app engine vs compute engine
+[06:20] == Smiche [~Smiche@mobile-access-5d6a87-111.dhcp.inet.fi] has joined ##gwt
+[06:22] == Smiche_ [~Smiche@mobile-access-5d6ab6-121.dhcp.inet.fi] has quit [Ping timeout: 248 seconds]
+[06:42] == linuxmodder [linuxmodde@fedora/linuxmodder] has quit [Ping timeout: 246 seconds]
+[07:07] == dardison11111118 [~dardison@181.91.1.243] has joined ##gwt
+[07:16] == Smiche [~Smiche@mobile-access-5d6a87-111.dhcp.inet.fi] has quit [Quit: Leaving]
+[07:36] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[08:04] == conan [~conan@mdproctor.plus.com] has quit [Quit: Computer has gone to sleep.]
+[08:08] == intrigus [uid114902@gateway/web/irccloud.com/x-wtzmxfopdwbcnjco] has joined ##gwt
+[08:12] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[09:17] == SHC [~quassel@59.88.215.143] has joined ##gwt
+[09:59] <niloc132> adlaistevenson: that's a fun one - the issue is that the core "GWT" classes and the various GWTBridge/Impl classes don't always live in the same places - some in the dev/core/src, some in user/src, and i think one even might be user/super
+[11:05] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has quit [Quit: Zzzz]
+[11:09] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has joined ##gwt
+[11:20] == niloc132 [~niloc132@74-95-102-246-Minnesota.hfc.comcastbusiness.net] has joined ##gwt
+[11:39] == hextileX [~Thunderbi@xdsl-213-196-226-152.netcologne.de] has joined ##gwt
+[12:08] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has quit [Ping timeout: 258 seconds]
+[12:09] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has joined ##gwt
+[12:30] == SHC [~quassel@59.88.215.143] has quit [Remote host closed the connection]
+[12:33] == hextileX [~Thunderbi@xdsl-213-196-226-152.netcologne.de] has quit [Ping timeout: 268 seconds]
+[13:11] == hextileX [~Thunderbi@xdsl-213-196-226-152.netcologne.de] has joined ##gwt
+[13:41] == Smiche [~Smiche@a88-85-144-105.mpynet.fi] has joined ##gwt
+[13:45] == conan [~conan@mdproctor.plus.com] has quit [Read error: Connection reset by peer]
+[13:45] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[14:38] == hextileX1 [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has joined ##gwt
+[14:40] == hextileX [~Thunderbi@xdsl-213-196-226-152.netcologne.de] has quit [Ping timeout: 244 seconds]
+[14:40] == hextileX1 has changed nick to hextileX
+[14:57] <adlaistevenson> Hmm, how do we get javac to resolve the packages using different dirs?
+[15:19] <jnehlmeier> adlaistevenson: what do you mean? AFAICT source files can be in any folder structure while class files must have matching package/directories.
+[15:29] <adlaistevenson> Oh, okay, Then the problem is my build is missing certain classes, so the class files aren't being generated.
+[15:29] <adlaistevenson> Err, perhaps.
+[15:37] <adlaistevenson> Here's the Makefile, which I originally generated from mmake: https://github.com/bpilot/jcc/blob/master/Makefile
+[15:37] <javabot> adlaistevenson's title: "jcc/Makefile at master  bpilot/jcc  GitHub"
+[15:41] <adlaistevenson> This is learning exercise mostly, but I want to build GWT's compiler from source.
+[15:51] <jnehlmeier> so taming the beast literally
+[16:05] <adlaistevenson> Yeah. I think I am close: https://paste.fedoraproject.org/500875/10923691/
+[16:05] <javabot> adlaistevenson's title: "#500875  Fedora Project Pastebin"
+[16:18] == [1]slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has joined ##gwt
+[16:21] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has quit [Ping timeout: 258 seconds]
+[16:21] == [1]slugmandrew has changed nick to slugmandrew
+[16:33] == Smiche [~Smiche@a88-85-144-105.mpynet.fi] has quit [Quit: Leaving]
+[17:04] == niloc132 [~niloc132@74-95-102-246-Minnesota.hfc.comcastbusiness.net] has quit [Quit: Zzzz]
+[17:08] == FeyFre [~Miranda@cpe-109-108-244-185.enet.vn.ua] has joined ##gwt
+[17:52] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has joined ##gwt
+[17:58] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has quit [Quit: Leaving]
+[18:29] == EduFrazao [~Peste_Bub@200-100-175-110.dial-up.telesp.net.br] has joined ##gwt
+[18:31] == Peste_Bubonica [~Peste_Bub@152.250.88.234] has quit [Ping timeout: 250 seconds]
+[18:38] == EduFrazao [~Peste_Bub@200-100-175-110.dial-up.telesp.net.br] has quit [Quit: Leaving]
+[18:51] <niloc132> adlaistevenson: get past that dir structure thingie?
+[18:52] <niloc132> there is a quirk you have to be aware of - gwt doesnt actually generate .class files out of all of the .java files in its codebase
+[18:52] <niloc132> this mostly applies to "super source", aka emulated sources, where dirty things must be done to get the code to compile at all, or where they live in packages within "java" itself, since they are, after all, emulation
+[19:05] <adlaistevenson> Good to know. Will have another crack at it once I am done with work (annoying SQL debugging).
+[19:13] == intrigus [uid114902@gateway/web/irccloud.com/x-wtzmxfopdwbcnjco] has quit [Quit: Connection closed for inactivity]
+[19:38] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has quit [Ping timeout: 265 seconds]
+[20:06] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has joined ##gwt
+[21:29] == FeyFre [~Miranda@cpe-109-108-244-185.enet.vn.ua] has quit [Quit: FeyFre]
+[21:30] <adlaistevenson> Okay, beyond the dirs.
+[21:30] <adlaistevenson> Trying to resolve Closure deps
+[21:41] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has quit [Quit: hextileX]
+[21:52] <niloc132> adlaistevenson: hmm - closure stylesheet compiler, yes? the closure js compiler isnt really part of gwt as of 2.8
+[21:53] <adlaistevenson> niloc132: com/google/gwt/core/linker/SymbolMapsLinker.java wanted com.google.debugging.sourcemap.SourceMapGeneratorV3
+[21:56] <niloc132> ah yeah, that is called sourcemap-rebased.jar in gwt i think?
+[21:56] <niloc132> you do have the tools dir, yes?
+[21:57] <niloc132> either tools/lib/jscomp/20160315/sourcemap-rebased.jar tools/lib/jscomp/sourcemap-rebased.jar, checking...
+[21:57] <adlaistevenson> niloc132: No, these are my jars: https://paste.fedoraproject.org/501438/16583814/
+[21:57] <javabot> adlaistevenson's title: "#501438  Fedora Project Pastebin"
+[21:57] <niloc132> the former
+[21:58] <niloc132> https://github.com/gwtproject/tools
+[21:58] <javabot> niloc132's title: "GitHub - gwtproject/tools"
+[21:58] <niloc132> you can use that one, but the default gwt build repackages jars because those classes are used in the compiler and it is dependent on an older version
+[21:59] <niloc132> and google has this thing about always using builds off of trunk
+[22:00] <niloc132> at least in gwt source, it depends on com.google.gwt.thirdparty.debugging.sourcemap.SourceMapGeneratorV3, hence, "rebased" - or are you actually editing all of the files to unrebase them?
+[22:00] <adlaistevenson> Argh, I wish I saw that!
+[22:00] <niloc132> https://gwt.googlesource.com/gwt/+/master/dev/core/src/com/google/gwt/core/linker/SymbolMapsLinker.java#39
+[22:00] <javabot> niloc132's title: "dev/core/src/com/google/gwt/core/linker/SymbolMapsLinker.java - gwt - Git at Google"
+[22:00] <adlaistevenson> Yeah I have been
+[22:01] <niloc132> hmm - what happened in your head when you decided that the source as-is in git couldn't compile without manual editing?
+[22:01] <niloc132> you seem to be decently clever, so i imagine it was creative...
+[22:02] <adlaistevenson> I knew I was Doing It Wrong, and decided to do it anyway just to push forward.
+[22:04] <niloc132> so once upon a time in college i had a project (doesnt matter what) that i couldn't build, because of a compiler error. rather than assume that _my_ setup was screwed up, i went ahead and tried tweaking the source, and so on
+[22:04] <adlaistevenson> I wish I knew about rebasing. I got pretty frustrated trying to understand what was going on with thirdparty.
+[22:04] <niloc132> long story short, it didnt work, i was just missing some crap that autoconfig wanted or some such
+[22:04] <niloc132> yeah - did you try reading the build instructions? i ...think that tools is prominently mentioned
+[22:05] <niloc132> "You need the GWT tools repository checked out and up-to-date. By default it is expected to be found at ../tools. You can override the default location using the GWT_TOOLS environment variable or passing -Dgwt.tools= argument to ant."
+[22:05] <adlaistevenson> Oh, I don't do that until all else fails. ;-)
+[22:05] <niloc132> ...it is the third bullet point ;)
+[22:05] <niloc132> hahaha fair enough
+[22:05] <niloc132> well, now you know, and are ... better for it?
+[22:05] <niloc132> building character while building gwt
+[22:05] <adlaistevenson> I have been doing this whenever I get a break from work, so certainly noy focused.
+[22:05] <adlaistevenson> Yeah
+[22:06] <adlaistevenson> Okay, time to start from scratch.
+[22:06] <niloc132> eh, probably not scratch, but any source which doesnt build isn't because the source is wrong
+[22:08] <niloc132> you'll see this in other cases too - guava, protobuf, json
+[22:09] <niloc132> ...for my own "hey lets rebuild the build", those are all i've hit so far, and i have everything up to the compiler itself built (not tests yet)
+[22:10] <adlaistevenson> Nice.
+
