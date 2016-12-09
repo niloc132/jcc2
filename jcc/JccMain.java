@@ -67,9 +67,9 @@ public class JccMain extends Compiler
   try {
 
       // Synthetic: Not associated with an XML manifest file.
-      String[] inherits = new String[]{"com.google.gwt.core.Core"};
-      ModuleDef moduleDefCore = ModuleDefLoader.createSyntheticModule(logger, "ailoadcore",
-        inherits, true);
+//      String[] inherits = new String[]{"com.google.gwt.core.Core"};
+//      ModuleDef moduleDefCore = ModuleDefLoader.createSyntheticModule(logger, "ailoadcore",
+//        inherits, true);
 
       // Synthetic: Not associated with an XML manifest file.
 /*      moduleDef = ModuleDefLoader.createSyntheticModule(logger, "aimadonna",
