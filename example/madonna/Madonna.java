@@ -6,5 +6,10 @@ public class Madonna
   {
 
   }
+
+  public static void main()
+  {
+
+  }
 }
 

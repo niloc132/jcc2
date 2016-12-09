@@ -1,0 +1,76 @@
+Loading module...
+Public resources found in...
+Translatable source found in...
+DEBUG getAllSourceFiles 19
+DEBUG getAllSourceFiles com/google/gwt/core/client/impl/AsyncFragmentLoader.java
+jcc2 Hello World 32
+Canonical Module Name: madonna
+Found 0 cached/archived units.  Used 0 / 19 units from cache.
+Compiling...
+   Compilation completed in 0.77 seconds
+Tracing compile failure path for type 'com.google.gwt.core.client.prefetch.RunAsyncCode'
+   Errors in 'file:/opt/ailabs/jcc2/example/com/google/gwt/core/client/prefetch/RunAsyncCode.java'
+      Line 1: The declared package "com.google.gwt.core.client.prefetch.RunAsyncCode" does not match the expected package "com.google.gwt.core.client.prefetch"
+   Checked 1 dependencies for errors.
+Removing invalidated units
+Resolving enclosing classes
+Resolving com.google.gwt.core.client.EntryPoint
+   Found type 'com.google.gwt.core.client.EntryPoint'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.GWT
+   Found type 'com.google.gwt.core.client.GWT'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.JavaScriptObject
+   Found type 'com.google.gwt.core.client.JavaScriptObject'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.RunAsyncCallback
+   Found type 'com.google.gwt.core.client.RunAsyncCallback'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.impl.AsyncFragmentLoader
+   Found type 'com.google.gwt.core.client.impl.AsyncFragmentLoader'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.impl.Impl
+   Found type 'com.google.gwt.core.client.impl.Impl'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.core.client.impl.prefetch.RunAsyncCode
+   Found type 'com.google.gwt.core.client.impl.prefetch.RunAsyncCode'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Array
+   Found type 'com.google.gwt.lang.Array'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Cast
+   Found type 'com.google.gwt.lang.Cast'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.ClassLiteralHolder
+   Found type 'com.google.gwt.lang.ClassLiteralHolder'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.CollapsedPropertyHolder
+   Found type 'com.google.gwt.lang.CollapsedPropertyHolder'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Exceptions
+   Found type 'com.google.gwt.lang.Exceptions'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.LongLib
+   Found type 'com.google.gwt.lang.LongLib'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.ModuleUtils
+   Found type 'com.google.gwt.lang.ModuleUtils'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Runtime
+   Found type 'com.google.gwt.lang.Runtime'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Stats
+   Found type 'com.google.gwt.lang.Stats'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving com.google.gwt.lang.Util
+   Found type 'com.google.gwt.lang.Util'
+      [WARN] Unable to resolve supertype java/lang/Object
+Resolving madonna.Madonna
+   Found type 'madonna.Madonna'
+      [WARN] Unable to resolve supertype java/lang/Object
+Tracing compile failure path for type 'java.lang.Object'
+   Checked 0 dependencies for errors.
+[ERROR] Hint: Your source appears not to live underneath a subpackage called 'client'; no problem, but you'll need to use the <source> directive in your module to make it accessible
+[ERROR] Hint: Check that your module inherits 'com.google.gwt.core.Core' either directly or indirectly (most often by inheriting module 'com.google.gwt.user.User')
+VALIDATED: false
+COMPILED

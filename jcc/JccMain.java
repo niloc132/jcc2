@@ -16,6 +16,7 @@ import com.google.gwt.dev.NullRebuildCache;
 import com.google.gwt.dev.CompilerContext;
 import com.google.gwt.dev.CompilerOptions;
 import com.google.gwt.dev.CompilerOptionsImpl;
+import com.google.gwt.dev.Precompilation;
 import com.google.gwt.dev.Precompile;
 
 /** Don't ask why this is called class path when we are loading Java source units */
@@ -57,14 +58,18 @@ public class JccMain extends Compiler
     TreeLogger logger = new PrintWriterTreeLogger();
 
     final CompilerOptions options = new CompilerOptionsImpl();
-
-    String[] inherits = new String[0]; 
+ 
 
     System.out.println("Loading module...");
 
     ModuleDef moduleDef = null;
 
-    //try {
+  try {
+
+      // Synthetic: Not associated with an XML manifest file.
+      String[] inherits = new String[]{"com.google.gwt.core.Core"};
+      ModuleDef moduleDefCore = ModuleDefLoader.createSyntheticModule(logger, "ailoadcore",
+        inherits, true);
 
       // Synthetic: Not associated with an XML manifest file.
 /*      moduleDef = ModuleDefLoader.createSyntheticModule(logger, "aimadonna",
@@ -76,6 +81,9 @@ public class JccMain extends Compiler
 
       moduleDef.addSourcePackage("", new String[]{}, new String[]{},
         new String[]{}, true, true);
+
+      // Main has entrypoint.
+      moduleDef.addEntryPointTypeName("madonna.Madonna");
 
       moduleDef.normalize(logger);
 
@@ -96,11 +104,6 @@ System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles()[0]
 
       //ResourceOracle lazySourceOracle = moduleDef.getSourceResourceOracle();
       //lazySourceOracle.add("madonna.java");
-    /*}
-    catch (UnableToCompleteException e) {
-      System.out.println("MODULEDEF LOAD FAILED " + e.toString() );  
-      System.out.println("STACKTRACE: " + e.getStackTrace() );
-    }*/
 
     System.out.println("jcc2 Hello World 32");
 
@@ -116,10 +119,23 @@ System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles()[0]
 
       System.out.println("Canonical Module Name: " + moduleName);
 
-      boolean validated = Precompile.validate(logger, compilerContext);
+      //boolean validated = Precompile.validate(logger, compilerContext);
+      // Precompilation, which diagnoses problems with modules.
+      Precompilation precompilation = Precompile.precompile(logger, compilerContext);
 
-      System.out.println("VALIDATED: " + validated);
-      System.out.println("COMPILED");
+      if (precompilation == null) {
+        System.out.println("JccMain: Precompilation failed, cannot compile!");
+        System.exit(0);
+        return;
+      }
+
+      System.out.println("COMPILED23" + (precompilation != null) );
+
+        }
+    catch (UnableToCompleteException e) {
+      System.out.println("MODULEDEF LOAD FAILED " + e.toString() );  
+      System.out.println("STACKTRACE: " + e.getStackTrace() );
+    }
   }
 }
 
