@@ -16,6 +16,7 @@ import com.google.gwt.dev.NullRebuildCache;
 import com.google.gwt.dev.CompilerContext;
 import com.google.gwt.dev.CompilerOptions;
 import com.google.gwt.dev.CompilerOptionsImpl;
+import com.google.gwt.dev.Precompile;
 
 /** Don't ask why this is called class path when we are loading Java source units */
 class JccResourceLoader implements ResourceLoader
@@ -111,7 +112,14 @@ System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles()[0]
             .module(moduleDef)
             .build();
 
-    System.out.println("COMPILED");
+      String moduleName = moduleDef.getCanonicalName();
+
+      System.out.println("Canonical Module Name: " + moduleName);
+
+      boolean validated = Precompile.validate(logger, compilerContext);
+
+      System.out.println("VALIDATED: " + validated);
+      System.out.println("COMPILED");
   }
 }
 
