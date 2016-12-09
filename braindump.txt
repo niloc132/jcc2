@@ -25,3 +25,18 @@ GUESS AS TO CRASH: Cannot find entry point in AST, due to incorrect source code.
 
 
 FInd __EntryMethodHolder
+
+LEARNED: NullPointerException in compile is caused by missing entry method we think because it compiles if we disable entry point reference.
+    
+    TEST: Set this to null in JavaToJavaScriptCompiler:
+    String entryMethodHolderTypeName = null;
+        buildEntryMethodHolder(rpo.getGeneratorContext(), entryPointTypeNames, allRootTypes);
+
+
+We think the entry point is onModuleLoad().
+
+
+This is not the cause of AST null. :-(
+
+We suspect instead the compiler is depending on something we are missing in "userland" code
+
