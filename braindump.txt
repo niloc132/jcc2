@@ -1,0 +1,27 @@
+TIRED REALIZATION:
+
+JavaToJavaScriptCompiler.java
+-> UnifyAst.flowInto()
+
+Program is crashing at constructJavaAST() due to NullPointerException.
+
+What pointer is null?
+
+[ERROR] Unexpected internal compiler error
+java.lang.NullPointerException
+        at com.google.gwt.dev.jjs.impl.UnifyAst.flowInto(UnifyAst.java:1186)
+        at com.google.gwt.dev.jjs.impl.UnifyAst.exec(UnifyAst.java:870)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.unifyJavaAst(JavaToJavaScriptCompiler.java:1413)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.constructJavaAst(JavaToJavaScriptCompiler.java:1225)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.precompile(JavaToJavaScriptCompiler.java:1140)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.precompile(JavaToJavaScriptCompiler.java:255)
+        at com.google.gwt.dev.Precompile.precompile(Precompile.java:255)
+        at com.google.gwt.dev.Precompile.precompile(Precompile.java:202)
+        at com.google.gwt.dev.Precompile.precompile(Precompile.java:143)
+        at JccMain.main(JccMain.java:124)
+JccMain: Precompilation failed, cannot compile!
+
+GUESS AS TO CRASH: Cannot find entry point in AST, due to incorrect source code.
+
+
+FInd __EntryMethodHolder

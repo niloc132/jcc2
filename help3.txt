@@ -1,0 +1,176 @@
+[15:11] == adlaistevenson [443c3c49@gateway/web/freenode/ip.68.60.60.73] has joined ##gwt
+[15:11] -ChanServ- [##gwt] Welcome to the unofficial Google Web Toolkit channel on freenode. This is a starting (and growing) community, and we need your help. Stick around!
+[16:28] == dardison11111119 [~dardison@181.95.130.148] has joined ##gwt
+[17:37] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has quit [Ping timeout: 244 seconds]
+[18:05] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has quit [Remote host closed the connection]
+[18:13] == intrigus [uid114902@gateway/web/irccloud.com/x-eijjafuvjxyzyvvr] has quit [Quit: Connection closed for inactivity]
+[18:28] == Essington [~Essington@unaffiliated/essington] has quit [Read error: Connection reset by peer]
+[18:36] == dardison11111119 [~dardison@181.95.130.148] has quit [Ping timeout: 265 seconds]
+[18:41] == Essington [~Essington@unaffiliated/essington] has joined ##gwt
+[18:43] == conan [~conan@mdproctor.plus.com] has quit [Read error: Connection reset by peer]
+[18:44] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[19:41] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has joined ##gwt
+[20:45] == aNeutrino_______ [~aNeutrino@152.206.104.178] has joined ##gwt
+[21:07] <adlaistevenson> Finally able to create ModuleDef, control class path, and get GWT compiler to read-in and attempt to compile.
+[21:07] <adlaistevenson> Of course, it is failing with lots of errors at Precompile.validate() :-)
+[21:15] <adlaistevenson> Looks like we need gwt/emul/java/lang/Object.java
+[22:19] == aNeutrino_______ [~aNeutrino@152.206.104.178] has quit [Quit: aNeutrino_______]
+[22:19] == aNeutrino_______ [~aNeutrino@152.206.104.178] has joined ##gwt
+[22:32] <niloc132> adlaistevenson: you need a dozen or so from super, maybe more based on deps
+[22:33] <niloc132> that .sh i linked has the references in JProgram that list must-haves
+[22:38] <adlaistevenson> Perfect: https://github.com/niloc132/gwt/commit/6e2913fd0913cf20f3386e140d365df75f769690
+[22:38] <javabot> adlaistevenson's title: "Restructure all of gwt-dev (and parts of gwt-user) into smaller disti  niloc132/gwt@6e2913f  GitHub"
+[22:38] <niloc132> imnot 100% that this is all
+[22:39] <niloc132> but its a starting point from reading the code
+[22:39] <niloc132> easier than adding one at a time without understanding
+[22:41] <niloc132> 11 wks of angry in my arms, will offer more context soon
+[22:50] <adlaistevenson> Understood, it's a pretty awesome undertaking.
+[23:09] <niloc132> ok, so JProgram and JavaToJavaScriptCompiler are generally the best sources of reading material
+[23:09] <niloc132> at least in terms of the compiler itself
+[23:10] <niloc132> but understanding the gwt/emul/java/lang/Object.java bit requires understanding of the .gwt.xml moduledef stuff
+[23:11] <niloc132> "super-source" lets a package contain another package - inside of com.google.gwt there could be a Emulation.gwt.xml file with <super-source path=emul />, which means that everything inside emul replaces whatever is normally in the classpath at that location
+[23:11] <niloc132> so java/lang/Object and other interesting stuff show up there
+[23:14] <niloc132> usually super-source is used for one of two things: emulation of jre, or emulation of something you yourself have written that isnt gwt compatible, instead of _making_ it gwt compatible
+[23:14] <niloc132> you can skip methods/fields/ctors, you can change some specifics like visibility, all kinds of annoying things
+[23:15] <niloc132> your IDE will act as if you are compiling against the real thing, then GWT will use super source as a replacement
+[23:15] <niloc132> (you can also cheat and create classes which can't actually be referenced - gwt is full of those, usually for internal compiler flags or implementation of language details like casts, class literals, or longs)
+[23:29] <adlaistevenson> Okay, JavaToJavaScriptCompiler.java will be my evening reading time then it looks like :-)
+[23:33] <niloc132> that is a great one in terms of seeing what the compiler does to optimize and when
+[23:33] <niloc132> decently commented too
+[23:33] <niloc132> has gotten more complex with the incremental stuff (makes recompiling when actively iterating faster), but adds complexity in general while reading
+[23:34] <niloc132> compilePermutation is the main interesting one iirc
+[23:35] <niloc132> followed by optimizeJsLoop
+[23:35] <niloc132> (which is called by compilePermutation)
+[23:40] == Essingto_ [~Essington@unaffiliated/essington] has joined ##gwt
+[23:44] == Essington [~Essington@unaffiliated/essington] has quit [Ping timeout: 258 seconds]
+[23:46] <adlaistevenson> I know it's something I've done, but have you ever seen this ClassCastException? https://paste.fedoraproject.org/502203/58662148/
+[23:46] <javabot> adlaistevenson's title: "#502203  Fedora Project Pastebin"
+[23:52] <niloc132> huh, that's unique
+[23:52] <niloc132> you've implemented a not-interface
+[23:52] <niloc132> are you sure your java actually compiles as java, before piping it into gwt?
+[23:53] <niloc132> your line numbers seem slightly wonky
+[23:53] <niloc132> oh nm, its mine
+[23:54] <niloc132> wait wtf - it is failing while processing java.lang.String
+[23:55] <niloc132> best guess, you're using a different jdt version than 3.11.2-CUSTOM that gwt 2.8 uses
+[23:55] <adlaistevenson> This is silly, but it might be that I have created empty classes for things like java/lang/String as a test.
+[23:55] <niloc132> seems unlikely
+[23:55] <niloc132> since you appear to be operating out of a custom main(), perhaps debug it and see what Class it is that is being treated as an interface?
+[23:56] <niloc132> i.e. put a breakpoint on all ClassCastExceptions and see what the value is
+[23:59] == aNeutrino_______ [~aNeutrino@152.206.104.178] has quit [Quit: aNeutrino_______]
+[00:01] <adlaistevenson> Argh, it may be time to learn jdb.
+[00:02] <niloc132> ...oh you're not using an IDE?
+[00:03] <niloc132> alternative: put some logging in there to see what is passing through there: eventually you will regret this, but from the trace you sent it seems it will fail fairly early on and not log much
+[00:03] <adlaistevenson> No, I am using screen and vi. Not great.
+[00:04] <adlaistevenson> *vim
+[00:04] <niloc132> ...on purpose?
+[00:05] <niloc132> i mean, i love vim, and i dont love screen but it has been easier to abuse into what i want than tmux and such
+[00:05] <niloc132> but not for writing java
+[00:05] <niloc132> modern (i.e. 10 years old) java debuggers are just too handy to not use them
+[00:06] <adlaistevenson> I agree, I am just not often debugging Java -- until now :-)
+[00:06] <niloc132> oooh ok, got it
+[00:06] <adlaistevenson> What IDE do you use?
+[00:07] <niloc132> you said your general background was js/ts? anything else?
+[00:07] <niloc132> i use intellij almost exclusively, but eclipse isnt terrible either
+[00:07] <adlaistevenson> JS/TS and Goland
+[00:07] <adlaistevenson> *Golang
+[00:07] <niloc132> gwt support in intellij requires the "ultimate" version, so you have to either pay or get a license granted by virtue of working on an open source project
+[00:08] <niloc132> i find it helpful enough (even though they can't be arsed to fix bugs with gwt in their tooling...) that i buy my own licenses
+[00:10] <adlaistevenson> Ah, JetBrains. The Kotlin people
+[00:13] <niloc132> if you're building gwt, not yet actively writing code with gwt, the free version will suffice, since its really just a java project
+[00:44] <adlaistevenson> Okay, recompiled GWT from 2.8 release tar gz and error is gone. I suspect this is what I get for compiling off master
+[01:07] == aNeutrino_______ [~aNeutrino@152.206.104.178] has joined ##gwt
+[01:07] <adlaistevenson> Ah, now it comes to these: [ERROR] Hint: Your source appears not to live underneath a subpackage called 'client'; no problem, but you'll need to use the <source> directive in your module to make it accessible [ERROR] Hint: Check that your module inherits 'com.google.gwt.core.Core' either directly or indirectly (most often by inheriting module 'com.google.gwt.user.User')
+[01:23] == aNeutrino_______ [~aNeutrino@152.206.104.178] has quit [Ping timeout: 248 seconds]
+[01:39] == hextileX [~Thunderbi@xdsl-84-44-195-34.netcologne.de] has quit [Quit: hextileX]
+[01:47] == aNeutrino_______ [~aNeutrino@152.206.104.178] has joined ##gwt
+[01:56] == aNeutrino_______ [~aNeutrino@152.206.104.178] has quit [Read error: Connection reset by peer]
+[02:00] == aNeutrino_______ [~aNeutrino@152.206.104.178] has joined ##gwt
+[02:06] == aNeutrino_______ [~aNeutrino@152.206.104.178] has quit [Ping timeout: 246 seconds]
+[02:15] == aNeutrino_______ [~aNeutrino@152.206.104.239] has joined ##gwt
+[02:54] <adlaistevenson> So, java.lang.Object is a "seed type" which ModuleDef.checkForSeedTypes() verfies exists.
+[02:55] <adlaistevenson> I have a long way to go. :-)
+[02:59] == aNeutrino_______ [~aNeutrino@152.206.104.239] has quit [Ping timeout: 268 seconds]
+[03:19] == aNeutrino_______ [~aNeutrino@152.206.104.204] has joined ##gwt
+[03:51] == aNeutrino_______ [~aNeutrino@152.206.104.204] has quit [Ping timeout: 246 seconds]
+[04:22] == aNeutrino_______ [~aNeutrino@152.206.104.49] has joined ##gwt
+[04:38] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has joined ##gwt
+[04:51] == aNeutrino_______ [~aNeutrino@152.206.104.49] has quit [Ping timeout: 244 seconds]
+[05:15] == linux-modder [~linuxmodd@64.80.90.209] has joined ##gwt
+[05:16] == linux-modder [~linuxmodd@64.80.90.209] has quit [Max SendQ exceeded]
+[05:27] == linux-modder [~linuxmodd@64.80.90.209] has joined ##gwt
+[05:30] == linux-modder [~linuxmodd@64.80.90.209] has quit [Client Quit]
+[05:31] == conan [~conan@mdproctor.plus.com] has quit [Read error: Connection reset by peer]
+[05:31] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[05:41] == linux-modder [~linuxmodd@64.80.90.209] has joined ##gwt
+[06:21] == Peste_Bubonica [~Peste_Bub@189-68-112-177.dsl.telesp.net.br] has joined ##gwt
+[06:27] == conan [~conan@mdproctor.plus.com] has quit [Quit: Computer has gone to sleep.]
+[07:38] == lukaszx0 [sid2084@gateway/web/irccloud.com/x-ephuoiqknewjgvuh] has quit []
+[07:38] == lukaszx0 [sid2084@gateway/web/irccloud.com/x-xhteegiwlgtfliid] has joined ##gwt
+[08:03] == linux-modder [~linuxmodd@64.80.90.209] has quit [Ping timeout: 245 seconds]
+[08:07] == intrigus [uid114902@gateway/web/irccloud.com/x-usssqphvagqmbafc] has joined ##gwt
+[08:16] == aNeutrino_______ [~aNeutrino@152.206.104.49] has joined ##gwt
+[08:25] == aNeutrino_______ [~aNeutrino@152.206.104.49] has quit [Ping timeout: 260 seconds]
+[09:04] == aNeutrino_______ [~aNeutrino@152.206.104.49] has joined ##gwt
+[09:22] == aNeutrino_______ [~aNeutrino@152.206.104.49] has quit [Ping timeout: 248 seconds]
+[09:33] == aNeutrino_______ [~aNeutrino@152.206.104.49] has joined ##gwt
+[09:39] <niloc132> adlaistevenson: so that error message is a tiny bit of a lie
+[09:39] <niloc132> Core is _always_ inherited automatically
+[09:40] <niloc132> which brings in the module which holds j.l.Object... provided that source is correctly in com/google/gwt/emul
+[09:40] <niloc132> and provided com/google/gwt/emul/Emulation.gwt.xml or whatever it is called exists
+[09:40] <niloc132> both the .java and the .gwt.xml must be on the classpath
+[09:41] <niloc132> (along with other things, like Core.gwt.xml itself...)
+[10:02] == conan [~conan@mdproctor.plus.com] has joined ##gwt
+[10:14] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has quit [Ping timeout: 260 seconds]
+[10:23] == intrigus [uid114902@gateway/web/irccloud.com/x-usssqphvagqmbafc] has quit [Quit: Connection closed for inactivity]
+[10:38] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has quit [Quit: Zzzz]
+[10:40] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has joined ##gwt
+[10:48] == slugmandrew [~slugmandr@host81-155-126-152.range81-155.btcentralplus.com] has quit [Ping timeout: 265 seconds]
+[10:56] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has joined ##gwt
+[11:04] == niloc132 [~niloc132@74-95-102-246-Minnesota.hfc.comcastbusiness.net] has joined ##gwt
+[11:35] <adlaistevenson> Ah huh, here's the guy forcing existence of many classes: JProgram.buildInitialTypeNamesToIndex()
+[11:46] <niloc132> ...
+[11:46] <niloc132> :D
+[11:46] <niloc132> https://github.com/niloc132/gwt/commit/6e2913fd0913cf20f3386e140d365df75f769690#diff-75e2fe4517c739472ba9ebfaf2a4015aR308
+[11:46] <javabot> niloc132's title: "Restructure all of gwt-dev (and parts of gwt-user) into smaller disti  niloc132/gwt@6e2913f  GitHub"
+[11:47] <niloc132> thats actually why i linked you that a few days ago - i had thought you read it since you linked it back to me last night ;)
+[12:18] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has quit [Quit: Leaving]
+[12:18] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has joined ##gwt
+[12:22] <adlaistevenson> Argh, I never made it to the bottom.
+[12:23] <adlaistevenson> I am a little distracted, but I am learning.
+[12:24] <niloc132> sorry, thought i had called out specifically "there is a list of things the compiler needs" in that file when i referenced it
+[12:24] <niloc132> the comments are generally more interesting than the code
+[12:25] <adlaistevenson> You did, it's my memory
+[12:25] <adlaistevenson> Sorry
+[12:32] <adlaistevenson> You've been very helpful, I'm just a bit overwhelmed ATM
+[12:33] <niloc132> no problem, just trying to add some levity to the process, sorry if it is coming across as bitterness (sarcasm-over-ip is kinda crappy)
+[12:35] <adlaistevenson> hehehe, that's why we have emotion markup tags ;-)
+[12:36] <adlaistevenson> I will get this running, but it will be a while because work takes most of my time.
+[12:38] <adlaistevenson> Even now, I've been pulled in to solve user issues caused by user-installed browser extensions. So I am pretty much constantly distracted.
+[12:38] <niloc132> ugh
+[12:39] <adlaistevenson> So I'm keeping notes so I can get back and find what I missed, just need to read them :-)
+[12:39] <adlaistevenson> s/notes/cut & paste from IRC/
+[12:39] <niloc132> ~logs
+[12:39] <javabot> channel logs can be found at http://javabot.evanchooly.com/ (Select the channel from the list on the left-hand side.)
+[12:39] <niloc132> ;)
+[12:40] <niloc132> if you keep your records public others can follow along too
+[12:43] <niloc132> are we at least talking chrome/ff extensions, or are these native code, patching dom/js to their heart's content?
+[12:44] <adlaistevenson> Yup, keeping help TXT files in https://github.com/bpilot/jcc2 which I am trying to add braindump to of my understanding
+[12:44] <javabot> adlaistevenson's title: "GitHub - bpilot/jcc2: jcc2 -- Minimal GWT compiler with no userland library"
+[12:44] <adlaistevenson> Yes, Chrome extensions.
+[12:46] <adlaistevenson> Some of the issues can be solved by avoiding certain JS features, like for-in loops which are susceptible to bugs when JS Object prototype is extended.
+[12:47] <niloc132> oh yeah, dont do that
+[12:47] <niloc132> "here's a JS language feature: don't use it!"
+[12:47] <adlaistevenson> Crockford The Good Parts I found very helpfu
+[12:48] <adlaistevenson> Problem is, often libraries you use end up using the bad parts -- of course I have been getting vigilant on code quality of those now so that doesn't happy anymore
+[12:48] <adlaistevenson> Okay, back in.
+[12:49] <niloc132> well yeah - you have to avoid for-in loops to protect yourself against the prototype.js's of the world (or whatever modern shitty libs do this)
+[12:49] <adlaistevenson> It's a major flaw of Web security that no one seems to see as that.
+[12:50] <niloc132> eh?
+[12:50] <niloc132> the convention is to do something like Object.keys() or check hasOwnProperty
+[12:52] <adlaistevenson> Err, I was kind of ranting about the fact Extensions can run their garbage code in the same namespace as my application.
+[12:53] <niloc132> oh well that's true - but any user installed anything can run their garbage code on my machine and access anything i as a user can access
+[12:53] <niloc132> malware gonna malware
+[12:55] <adlaistevenson> Yup, the key I think is to reduce time spent debugging these users by having user disable extensions before sending ticket.
+[13:01] <niloc132> when you get back to it, reread the bit about supersource above, at least w.r.t. your git repo, your emul classes are in a funny package (also have no contents...)
+[13:01] <adlaistevenson> Argh, exhausted. Insufficient coffee.
+[13:01] <niloc132> sleep is a poor coffee substitute in a pinch
