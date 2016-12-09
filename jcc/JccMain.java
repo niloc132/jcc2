@@ -1,4 +1,6 @@
 import java.io.File;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -14,6 +16,37 @@ import com.google.gwt.dev.NullRebuildCache;
 import com.google.gwt.dev.CompilerContext;
 import com.google.gwt.dev.CompilerOptions;
 import com.google.gwt.dev.CompilerOptionsImpl;
+
+/** Don't ask why this is called class path when we are loading Java source units */
+class JccResourceLoader implements ResourceLoader
+{
+  /**
+   * Returns the URLs that will be searched in order for files.
+   */
+  public List<URL> getClassPath()
+  {
+    List<URL> classPath = new ArrayList<URL>();
+    try {
+      classPath.add( new URL("file:/opt/ailabs/jcc2/example/") );
+    }
+    catch(MalformedURLException e) {
+      System.out.println("MalformedURLException: " + e);
+    }
+    return classPath;
+  }
+
+  /**
+   * Returns a URL that may be used to load the resource, or null if the
+   * resource can't be found.
+   *
+   * <p> (The API is the same as {@link ClassLoader#getResource(String)}.) </p>
+   */
+  public URL getResource(String resourceName)
+  {
+System.out.println("JccResourceLoader.getResource(): asked to load " + resourceName);
+    return null;
+  }
+}
 
 /** Command line. TODO Why bother to sub-class Compiler??? */
 public class JccMain extends Compiler
@@ -35,12 +68,8 @@ public class JccMain extends Compiler
       // Synthetic: Not associated with an XML manifest file.
 /*      moduleDef = ModuleDefLoader.createSyntheticModule(logger, "aimadonna",
         inherits, true); */
-      ResourceLoader fallbackResources = ResourceLoaders.forClassLoader(Thread.currentThread());
 
-      List<File> moduleDirectories = new ArrayList<File>();
-      moduleDirectories.add( new File("/opt/ailabs/jcc2/example/") );
-
-      ResourceLoader resources = ResourceLoaders.forPathAndFallback(moduleDirectories, fallbackResources);
+      ResourceLoader resources = new JccResourceLoader();
 
       moduleDef = new ModuleDef("madonna", resources, true, true);
 
@@ -50,6 +79,7 @@ public class JccMain extends Compiler
       moduleDef.normalize(logger);
 
 System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles().length );
+System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles()[0] );
 
       /*List<File> moduleDirectories =
         new ArrayList<File>(){{
