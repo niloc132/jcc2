@@ -15,6 +15,8 @@
  */
 package java.lang;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 /**
  * Generally unsupported. This class is provided so that the GWT compiler can
  * choke down class literal references.
@@ -30,5 +32,14 @@ public final class Class<T> {
     return "ObjMasd";
   }
 
+  /**
+   * Create a Class object for a class.
+   *
+   * @skip
+   */
+  static <T> Class<T> createForClass(String packageName, String compoundClassName,
+      JavaScriptObject typeId, Class<? super T> superclass) {
+    return null;
+  }
 }
 
