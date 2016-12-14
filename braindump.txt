@@ -40,3 +40,11 @@ This is not the cause of AST null. :-(
 
 We suspect instead the compiler is depending on something we are missing in "userland" code
 
+
+getIndexedMethod() calls in UnifyAst which execute upfront are probably referencing things
+we can't find in the source.
+
+RESUME, find where this is:
+[ERROR] Errors in 'com/google/gwt/core/client/JavaScriptObject.java'
+   [ERROR] Line 3: Reference to 'com.google.gwt.lang.Cast.getClass(Ljava/lang/Object;)Ljava/lang/Class;' could not be resolved
+

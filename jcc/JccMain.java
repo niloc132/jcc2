@@ -59,6 +59,7 @@ public class JccMain extends Compiler
 
     final CompilerOptions options = new CompilerOptionsImpl();
  
+    options.setRunAsyncEnabled(false);
 
     System.out.println("Loading module...");
 
