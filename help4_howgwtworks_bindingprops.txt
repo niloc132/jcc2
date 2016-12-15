@@ -15,3 +15,8 @@
 [14:15] <niloc132> err, findBindingProp() should obviously have the parameter "compiler.stackMode"...
 [14:20] <adlaistevenson> Argh. I'm not surprised I was doing it wrong. This makes a lot of sense, adding this to notes about "how GWT works" for when I try tonight.
 
+RESUME:
+though look at ModuleDefSchema to learn what i just said above
+
+Figure out how to fix next NPE we hit
+
