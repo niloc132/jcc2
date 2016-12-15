@@ -11,13 +11,21 @@ import com.google.gwt.dev.cfg.ResourceLoader;
 import com.google.gwt.dev.cfg.ResourceLoaders;
 import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
+import com.google.gwt.dev.cfg.BindingProperty;
+import com.google.gwt.dev.cfg.ConditionNone;
 import com.google.gwt.dev.Compiler;
 import com.google.gwt.dev.NullRebuildCache;
+import com.google.gwt.dev.CompilePerms;
 import com.google.gwt.dev.CompilerContext;
 import com.google.gwt.dev.CompilerOptions;
 import com.google.gwt.dev.CompilerOptionsImpl;
 import com.google.gwt.dev.Precompilation;
 import com.google.gwt.dev.Precompile;
+import com.google.gwt.dev.Permutation;
+import com.google.gwt.dev.jjs.PermutationResult;
+import com.google.gwt.dev.util.PersistenceBackedObject;
+
+
 
 /** Don't ask why this is called class path when we are loading Java source units */
 class JccResourceLoader implements ResourceLoader
@@ -80,6 +88,12 @@ public class JccMain extends Compiler
 
       moduleDef = new ModuleDef("madonna", resources, true, true);
 
+// Would normally be set in XML
+BindingProperty stackModeProp = new BindingProperty("compiler.stackMode");
+stackModeProp.addDefinedValue(new ConditionNone(), "STRIP");
+moduleDef.getProperties().addBindingProperty(stackModeProp);
+//"strip"
+
       moduleDef.addSourcePackage("", new String[]{}, new String[]{},
         new String[]{}, true, true);
 
@@ -130,7 +144,25 @@ System.out.println("DEBUG getAllSourceFiles " + moduleDef.getAllSourceFiles()[0]
         return;
       }
 
-      System.out.println("COMPILED23" + (precompilation != null) );
+      System.out.println("PRECOMPILE SUCCESS!" + (precompilation != null) );
+
+
+// Compilation
+System.out.println("COMPILING...");
+			Permutation[] allPerms = precompilation.getPermutations();
+
+File workDir = new File("/opt/ailabs/jcc2/work");
+
+			List<PersistenceBackedObject<PermutationResult>> resultFiles = CompilePerms.makeResultFiles(workDir, allPerms, options);
+			CompilePerms.compile(logger, compilerContext, precompilation, allPerms, options.getLocalWorkers(), resultFiles);
+
+//			ArtifactSet generatedArtifacts = precompilation.getGeneratedArtifacts();
+//			PrecompileTaskOptions precompileOptions = precompilation.getUnifiedAst().getOptions();
+
+System.out.println("COMPILED!");
+
+System.out.println("LINKING...");
+
 
         }
     catch (UnableToCompleteException e) {

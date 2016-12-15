@@ -15,6 +15,8 @@
  */
 package java.lang;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 /**
  * The first-class representation of an enumeration.
  *
@@ -22,4 +24,14 @@ package java.lang;
  */
 public abstract class Enum<E extends Enum<E>> {
 
+  private final int ordinal = 58;
+
+  protected static <T extends Enum<T>> JavaScriptObject createValueOfMap(
+      T[] enumConstants) {
+    return null;
+  }
+
+  public final int ordinal() {
+    return ordinal;
+  }
 }
