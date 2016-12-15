@@ -89,9 +89,9 @@ public class JccMain extends Compiler
       moduleDef = new ModuleDef("madonna", resources, true, true);
 
 // Would normally be set in XML
-BindingProperty stackModeProp = new BindingProperty("compiler.stackMode");
-stackModeProp.addDefinedValue(new ConditionNone(), "STRIP");
-moduleDef.getProperties().addBindingProperty(stackModeProp);
+//BindingProperty stackModeProp = new BindingProperty("compiler.stackMode");
+//stackModeProp.addDefinedValue(new ConditionNone(), "STRIP");
+//moduleDef.getProperties().addBindingProperty(stackModeProp);
 //"strip"
 
       moduleDef.addSourcePackage("", new String[]{}, new String[]{},

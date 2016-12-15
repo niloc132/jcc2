@@ -1,0 +1,17 @@
+
+[00:40] <adlaistevenson> Failed attempt to get compiler.stackMode() set: https://github.com/bpilot/jcc2/blob/f556c5b400811fcc12c4fc60e38536581e43adb0/jcc/JccMain.java#L91
+[00:40] <javabot> adlaistevenson's title: "jcc2/JccMain.java at f556c5b400811fcc12c4fc60e38536581e43adb0  bpilot/jcc2  GitHub"
+[00:41] <adlaistevenson> JsStackEmulator.getStackMode() won't let me go further
+[00:42] <adlaistevenson> Trying to run with the binding property set causes this error: https://paste.fedoraproject.org/506647/17805571/
+[00:42] <javabot> adlaistevenson's title: "#506647  Fedora Project Pastebin"
+[14:10] <niloc132> adlaistevenson: short version, you're doing it wrong
+[14:10] <niloc132> that object encapsulates not only the actually set value, but the possible values, and how they are collapsed, etc
+[14:11] <niloc132> instead, you should query your ModuleDef object for that BindingProperty object (which _already_ has three different DefinedValues)
+[14:11] <niloc132> and then set STRIP as the only actual value
+[14:11] <niloc132> (i'm about 80% about that, i'm not familiar with building these programmatically...)
+[14:12] <niloc132> (and am just browsing GWT's own source to figure that much)
+[14:15] <niloc132> likely you want moduleDef.getProperties().findBindingProp().setValues(new ConditionAll(), "STRIP");
+[14:15] <niloc132> ConditionAll with no args meaning "this is always the value"
+[14:15] <niloc132> err, findBindingProp() should obviously have the parameter "compiler.stackMode"...
+[14:20] <adlaistevenson> Argh. I'm not surprised I was doing it wrong. This makes a lot of sense, adding this to notes about "how GWT works" for when I try tonight.
+
