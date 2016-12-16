@@ -12,7 +12,7 @@ import com.google.gwt.dev.cfg.ResourceLoaders;
 import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
 import com.google.gwt.dev.cfg.BindingProperty;
-import com.google.gwt.dev.cfg.ConditionNone;
+import com.google.gwt.dev.cfg.ConditionAll;
 import com.google.gwt.dev.Compiler;
 import com.google.gwt.dev.NullRebuildCache;
 import com.google.gwt.dev.CompilePerms;
@@ -93,6 +93,9 @@ public class JccMain extends Compiler
 //stackModeProp.addDefinedValue(new ConditionNone(), "STRIP");
 //moduleDef.getProperties().addBindingProperty(stackModeProp);
 //"strip"
+BindingProperty stackModeProp = moduleDef.getProperties().createBinding("compiler.stackMode");
+stackModeProp.addDefinedValue(new ConditionAll(), "STRIP");
+stackModeProp.setValues(new ConditionAll(), "STRIP");
 
       moduleDef.addSourcePackage("", new String[]{}, new String[]{},
         new String[]{}, true, true);
