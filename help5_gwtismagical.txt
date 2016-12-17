@@ -1,0 +1,48 @@
+
+[14:50] <adlaistevenson> *it
+[15:10] == EduFrazao has changed nick to Peste_Bubonica
+[15:21] <niloc132> hmm. your module should implicitly add Core.gwt.xml, which should grab it
+[15:21] <niloc132> yeah, inherits it from StackTrace.gwt.xml
+[15:21] <niloc132> so... something might be funky there
+[15:23] == hextileX [~Thunderbi@xdsl-213-196-248-45.netcologne.de] has quit [Quit: hextileX]
+[15:27] == Tica2 [~Tica2@79.112.194.248] has quit [Quit: Tica2]
+[16:16] == khagler [~khagler@2605:a601:1139:7c00:60d1:52d0:acd3:3ffb] has joined ##gwt
+[16:18] <adlaistevenson> Well, this is a funky experiment (I'm trying not to load any XML).
+[16:21] <niloc132> hmm
+[16:21] <niloc132> ok, give me a sec to give you a pointer, but things _may_ break in interesting ways with a purely synthetic module
+[16:23] <niloc132> adlaistevenson: com.google.gwt.dev.cfg.ModuleDefSchema#__module_begin
+[16:24] <niloc132> "All modules implicitly depend on com.google.gwt.core.Core..."
+[16:24] <niloc132> the problem is that this doesnt apply to projects consisting only of synthetic modules, which dont go through the schema class
+[16:24] <niloc132> so you must add an inherits on Core, or you won't even have java.lang.Object...
+[16:32] <adlaistevenson> That's fine, I am just going mock the required classes until it builds. I certainly expect a lot of things to be broken, which will be a way to learn about GWT and get more comfortable.
+[17:20] == mbarkley [~mbarkley@198-84-226-4.cpe.teksavvy.com] has quit [Remote host closed the connection]
+[17:21] == dardison11111118 [~dardison@152.171.75.241] has quit [Ping timeout: 258 seconds]
+[17:42] <niloc132> hmm. i'd go further than that - there are "magic methods" in gwt emulation code that the compiler rewrites for various reasons, i cant promise that things will be anywhere near sane without those classes actually existing
+[18:16] == voidDotClass [~ali@103.255.4.25] has joined ##gwt
+[18:31] <adlaistevenson> Right, I will have to make sure those methods *do* exist.
+[18:32] <adlaistevenson> Anyway, I appreciate your good guidance :-)
+[18:40] <niloc132> in general its a pretty limited set of magic methods (until you meet james nelson, he likes ... more magic in his code)
+[18:40] <niloc132> mostly just in classes like GWT, Impl, assorted other internals that are important to even get the program running
+[18:42] <niloc132> UnifyAst.maybeHandleMagicMethodCall is where the overt magic takes place (and i see i missed a class: System)
+[18:43] <niloc132> hmm, but those appear to actually work the opposite of how i said - they will only have something interesting happen to them if the compiler wanders past them
+[18:43] <niloc132> it wont go out of its way to find and rewrite them
+[18:45] <niloc132> specifically, the AST visitor looks for method _calls_ (not the methods themselves_ and rewrites them to do something else entirely (like evaluate to a constant or something)
+[18:46] <niloc132> the specific impl of java/lang/Class.java is required for ImplementClassLiteralsAsFields.java (think we went over this once, or i was talking to someone else about it) so that it can declare classes "programmatically", since thats how JS rolls
+[18:50] <niloc132> and i think i mentioned the likes of Cast already for implementing java instanceof and cast (including implicit ones from generics)
+[19:02] == EduFrazao [~Peste_Bub@177.138.225.173] has joined ##gwt
+[19:04] == Peste_Bubonica [~Peste_Bub@201-26-81-200.dsl.telesp.net.br] has quit [Ping timeout: 240 seconds]
+[19:05] == EduFrazao [~Peste_Bub@177.138.225.173] has quit [Client Quit]
+[19:07] == aNeutrino_______ [~aNeutrino@152.206.104.39] has joined ##gwt
+[19:29] == csadilek [~csadilek@CPE602ad0928239-CM602ad0928236.cpe.net.cable.rogers.com] has quit [Quit: csadilek]
+[19:31] == aNeutrino_______ [~aNeutrino@152.206.104.39] has quit [Ping timeout: 256 seconds]
+[19:42] == csadilek [~csadilek@CPE602ad0928239-CM602ad0928236.cpe.net.cable.rogers.com] has joined ##gwt
+[19:52] <niloc132> adlaistevenson: perhaps of interest: com.google.gwt.dev.jjs.JavaAstConstructor
+[19:52] == csadilek [~csadilek@CPE602ad0928239-CM602ad0928236.cpe.net.cable.rogers.com] has quit [Quit: csadilek]
+[19:52] <niloc132> this is a test class, despite the name
+[19:53] <niloc132> it builds a number of fake types, so that the compiler at least can turn on, but without the real versions of those classes
+[19:53] <niloc132> at least thats what the docs suggest it does
+[20:00] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has quit [Read error: Connection reset by peer]
+[20:02] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has joined ##gwt
+[20:18] == khagler [~khagler@2605:a601:1139:7c00:60d1:52d0:acd3:3ffb] has quit [Quit: Textual IRC Client: www.textualapp.com]
+[21:49] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has quit [Quit: Zzzz]
+[21:52] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has joined ##gwt
