@@ -20,7 +20,6 @@ package java.lang;
  * Intrinsic string class.
  */
 // Needed to have constructors not fail compilation internally at Google
-@SuppressWarnings({ "ReturnValueIgnored", "unusable-by-js" })
 public final class String
 {
 
