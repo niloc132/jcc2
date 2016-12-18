@@ -16,12 +16,14 @@
 
 package java.lang;
 
-import java.util.Comparator;
+import java.io.Serializable;
 
 /**
  * Intrinsic string class.
  */
 // Needed to have constructors not fail compilation internally at Google
-public final class String {
+public final class String implements Comparable<String>, CharSequence,
+    Serializable
+{
  
 }

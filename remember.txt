@@ -1,0 +1,89 @@
+Microservices VS monolith: https://news.ycombinator.com/item?id=12133670
+
+[17:29] <niloc132> adlaistevenson: i'm led to understand that adwords already moved on to dart
+[17:29] <niloc132> and the new gwt codebase and the old one are going to live in parallel, its not going to change in place
+[17:30] <niloc132> clinit applies to more cases than enums, but to avoid skipping jvm semantics it is purely opt-in, so it won't blanket apply to all classes
+[17:30] <niloc132> and i havent made any progress (mostly because i havent had time, not because i dont think it can be done)
+[17:48] <adlaistevenson> Ah, understood. I know that is :-/
+[18:08] == aNeutrino_______ [~aNeutrino@152.206.104.238] has quit [Ping timeout: 260 seconds]
+[21:18] == perbl [perbl@82.116.79.87] has quit [Ping timeout: 252 seconds]
+[01:11] <adlaistevenson> Thanks for having a look.
+[01:11] * adlaistevenson is stuck on java.lang.String
+[02:42] == dardison11111119 [~dardison@181.90.98.132] has joined ##gwt
+[02:43] == dardison11111118 [~dardison@181.95.131.127] has quit [Ping timeout: 250 seconds]
+[03:40] == perbl [perbl@82.116.79.87] has joined ##gwt
+[04:48] == Muzer [~muzer@cpc96772-rdng27-2-0-cust294.15-3.cable.virginm.net] has quit [Ping timeout: 264 seconds]
+[05:04] == SHC [~quassel@45.249.251.6] has joined ##gwt
+[05:23] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has joined ##gwt
+[06:10] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has quit [Ping timeout: 260 seconds]
+[06:29] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has joined ##gwt
+[08:47] == intrigus [uid114902@gateway/web/irccloud.com/x-dboeuxfnapqyumbn] has joined ##gwt
+[09:52] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has quit [Ping timeout: 260 seconds]
+[10:04] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has joined ##gwt
+[10:24] <niloc132> adlaistevenson: re String - zero chance that Serializable is defined as a class instead of an interface?
+[10:24] <niloc132> i'll check your git in a bit
+[10:42] == slugmandrew [~slugmandr@host81-155-126-22.range81-155.btcentralplus.com] has joined ##gwt
+[10:48] == slugmandrew [~slugmandr@host81-155-126-22.range81-155.btcentralplus.com] has quit [Ping timeout: 258 seconds]
+[11:04] <niloc132> not actually seeing your String.java etc in git
+[11:05] == dardison11111119 [~dardison@181.90.98.132] has quit [Ping timeout: 250 seconds]
+[11:19] <jnehlmeier> niloc132: any steering group news? seems like no notes have been published for some time now.
+[11:20] <niloc132> hmm. sorry about that. i _can_ say that this will change somewhat going forward, but official news is pretty light and mostly boring right now
+[11:20] <niloc132> the technical side of gwt 3 is not something i can really comment on beyond what was said at gwtcon, google-ers have their own process to wade through to get the code out to us when it is ready to ship
+[11:21] <niloc132> something specific you are after? next meeting is mid-late jan due to the holiday break
+[11:23] <jnehlmeier> just wondering how its going forward now. with J2CL not being released yet development feels a bit stalled after the 2.8 release. but maybe its just because of holidays.
+[11:25] <jnehlmeier> I guess I just try to get some more Java8 stuff in
+[11:33] == intrigus [uid114902@gateway/web/irccloud.com/x-dboeuxfnapqyumbn] has quit [Quit: Connection closed for inactivity]
+[11:47] == Guest3955 [~aL@152.206.104.21] has joined ##gwt
+[11:54] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has quit [Ping timeout: 268 seconds]
+[11:57] == aL_ [~aL@152.206.104.21] has joined ##gwt
+[11:57] == Guest3955 [~aL@152.206.104.21] has quit [Read error: Connection reset by peer]
+[11:57] == aL_ has changed nick to Guest88845
+[11:58] == Guest88845 [~aL@152.206.104.21] has quit [Client Quit]
+[12:00] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has joined ##gwt
+[12:10] <niloc132> jnehlmeier: holidays are going to stall a fair bit based on what i remember from the last few years
+[12:11] <niloc132> i'm slowly doing an optimization for clinits, and eagerly awaiting the next elemental2 release, which hopefully is easier to use than just writing my own jsinterop classes as needed
+[12:11] <niloc132> also toying with some experiments in rpc-ish codegen with apt
+[12:22] <jnehlmeier> niloc132: yeah also thought about rpc every now and then because we use it so heavily at work
+[12:22] <jnehlmeier> niloc132: but APT currently sucks in eclipse :D
+[12:22] <niloc132> well. for sdm to make sense in future-gwt, apt is going to have to be built in to that refresh mechanism too i think
+[12:22] <niloc132> at least in some way
+[12:23] <jnehlmeier> I moved our GWT app to Dagger2 + AutoFactory in IntelliJ, everything worked well but then I pushed it and my Eclipse collegues got a heck of JDT/APT related exceptions/bugs
+[12:24] <jnehlmeier> so for now we have the dagger2 structure next to GIN and maintain both but still using gin
+[12:25] <jnehlmeier> also tried gradle for the APT part to circumvent eclipse apt bugs but well gradle often decides to make a full rebuild instead of incremental one, so it takes for ages then
+[12:31] == hextileX [~Thunderbi@xdsl-87-78-78-205.netcologne.de] has quit [Ping timeout: 268 seconds]
+[12:31] <niloc132> nice work gradle
+[12:32] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has quit [Quit: Zzzz]
+[12:32] == niloc132 [~niloc132@c-73-228-251-23.hsd1.mn.comcast.net] has joined ##gwt
+[12:33] <niloc132> i do like making this more a jvm problem though, if eclipse cant handle apt, its not gwt's fault any more ;)
+[12:34] <niloc132> my company is incorporating more apt stuff little by little - builder generation for beans, a little bit of autovalue
+[12:34] == SHC [~quassel@45.249.251.6] has quit [Remote host closed the connection]
+[12:35] <niloc132> if ides/tools cant support apt as distinct from gwt, thats a different problem to solve
+[12:35] <niloc132> and for how old apt is, its like not supporting generics at this point
+[12:48] <jnehlmeier> niloc132: at work we use JPA metamodel generation based on APT. From time to time IntelliJ also has some issues with APT probably caused by not collecting all required files during incremental compilation. So APT does not see some files and generates broken meta model classes.
+[12:48] <jnehlmeier> somehow I would like javac to have an incremental compile mode that just works
+adlaistevenson
+auke-
+conan
+D9
+djinni
+Drakon
+Essington
+javabot
+jnehlmeier
+l3dx
+linuxmodder
+lukaszx0
+niloc132
+oxymor00n
+perbl
+rabbit__
+rxo
+semteX_
+SJr
+tazle
+Thev00d00
+Thinkofname
+wooy
+Yamakaja
+yawkat
+zzxc
