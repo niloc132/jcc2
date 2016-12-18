@@ -1,0 +1,300 @@
+We fixed the silly bug where Serializable was a class, not an interface.
+
+While processing String.java, the compiler is still failing -- but due to NPE.
+
+java.lang.String mock class is located at: $PROJECTROOT/example/java/lang/String.java
+
+We are attempting build in working directory $PROEJECTROOT/jcc/
+
+java -cp ../gwtproject/gwt/build/lib/gwt-dev.jar:. JccMain
+
+THINKING:
+  Because java.lang.String mock class lacks certain methods expected by the compiler, it is crashing.
+  So maybe the problem is partly that I am unable to find where the compiler depends on methods to exist.
+  Given a day, I should be able to eventually find this.
+
+Here's the compiler output currently:
+
+Loading module...
+Public resources found in...
+Translatable source found in...
+DEBUG getAllSourceFiles 39
+DEBUG getAllSourceFiles com/google/gwt/core/client/impl/AsyncFragmentLoader.java
+jcc2 Hello World 32
+Canonical Module Name: madonna
+BEGIN_REAL_COMPILE
+Found 0 cached/archived units.  Used 0 / 39 units from cache.
+Compiling...
+   Compilation completed in 1.08 seconds
+Removing invalidated units
+Resolving enclosing classes
+Resolving com.google.gwt.core.client.EntryPoint
+   Found type 'com.google.gwt.core.client.EntryPoint'
+      Found type 'java.lang.Object'
+         Resolving method <init>
+         Resolving method equals
+         Resolving method getClass
+            Found type 'java.lang.Class'
+               Resolving method <init>
+               Resolving method createForArray
+                  Found type 'java.lang.String'
+                     Found type 'java.lang.Comparable'
+                     Found type 'java.lang.CharSequence'
+                     Found type 'java.io.Serializable'
+                     Resolving method <init>
+               Resolving method createForClass
+               Resolving method createForEnum
+                  Found type 'com.google.gwt.core.client.JavaScriptObject'
+                     Resolving method <init>
+               Resolving method createForInterface
+               Resolving method createForPrimitive
+               Resolving method isClassMetadataEnabled
+               Resolving method desiredAssertionStatus
+               Resolving method getName
+         Resolving method hashCode
+         Resolving method toString
+         Resolving method toString
+         Resolving method finalize
+         Resolving field ___clazz
+         Resolving field expando
+         Resolving field castableTypeMap
+         Resolving field typeMarker
+      Resolving method <init>
+Resolving com.google.gwt.core.client.GWT
+   Found type 'com.google.gwt.core.client.GWT'
+      Resolving method <init>
+      Resolving method isScript
+Resolving com.google.gwt.core.client.JavaScriptObject
+Resolving com.google.gwt.core.client.RunAsyncCallback
+   Found type 'com.google.gwt.core.client.RunAsyncCallback'
+      Resolving method <init>
+      Resolving method onFailure
+      Resolving method onSuccess
+Resolving com.google.gwt.core.client.impl.AsyncFragmentLoader
+   Found type 'com.google.gwt.core.client.impl.AsyncFragmentLoader'
+      Resolving method <init>
+      Resolving method onLoad
+Resolving com.google.gwt.core.client.impl.Impl
+   Found type 'com.google.gwt.core.client.impl.Impl'
+      Resolving method <init>
+Resolving com.google.gwt.core.client.impl.prefetch.RunAsyncCode
+   Found type 'com.google.gwt.core.client.impl.prefetch.RunAsyncCode'
+      Resolving method <init>
+Resolving com.google.gwt.core.client.prefetch.RunAsyncCode
+   Found type 'com.google.gwt.core.client.prefetch.RunAsyncCode'
+      Resolving method <init>
+Resolving com.google.gwt.lang.Array
+   Found type 'com.google.gwt.lang.Array'
+      Resolving method <init>
+      Resolving method isJavaArray
+      Resolving method setCheck
+      Resolving method initUnidimensionalArray
+      Resolving method initMultidimensionalArray
+      Resolving method stampJavaTypeInfo
+Resolving com.google.gwt.lang.Cast
+   Found type 'com.google.gwt.lang.Cast'
+      Resolving method <init>
+      Resolving method charToString
+      Resolving method castTo
+      Resolving method castToAllowJso
+      Resolving method castToArray
+      Resolving method castToJsoArray
+      Resolving method castToJsArray
+      Resolving method castToJso
+      Resolving method castToString
+      Resolving method castToDouble
+      Resolving method castToBoolean
+      Resolving method castToNative
+      Resolving method castToUnknownNative
+      Resolving method castToFunction
+      Resolving method castToJsObject
+      Resolving method getClass
+      Resolving method hasJavaObjectVirtualDispatch
+      Resolving method instanceOf
+      Resolving method instanceOfString
+      Resolving method instanceOfDouble
+      Resolving method instanceOfBoolean
+      Resolving method instanceOfArray
+      Resolving method instanceOfJsoArray
+      Resolving method instanceOfJsArray
+      Resolving method instanceOfAllowJso
+      Resolving method instanceOfJso
+      Resolving method instanceOfUnknownNative
+      Resolving method instanceOfNative
+      Resolving method instanceOfFunction
+      Resolving method instanceOfJsObject
+      Resolving method isArray
+      Resolving method isJavaScriptObject
+      Resolving method isNull
+      Resolving method isNotNull
+      Resolving method jsEquals
+      Resolving method jsNotEquals
+      Resolving method narrow_int
+      Resolving method narrow_long
+      Resolving field stringCastMap
+      Resolving field doubleCastMap
+      Resolving field booleanCastMap
+Resolving com.google.gwt.lang.ClassLiteralHolder
+   Found type 'com.google.gwt.lang.ClassLiteralHolder'
+      Resolving method <init>
+Resolving com.google.gwt.lang.CollapsedPropertyHolder
+   Found type 'com.google.gwt.lang.CollapsedPropertyHolder'
+      Resolving method <init>
+      Resolving method getPermutationId
+Resolving com.google.gwt.lang.Exceptions
+   Found type 'com.google.gwt.lang.Exceptions'
+      Resolving method <init>
+      Resolving method toJava
+      Resolving method toJs
+Resolving com.google.gwt.lang.LongLib
+   Found type 'com.google.gwt.lang.LongLib'
+      Resolving method <init>
+Resolving com.google.gwt.lang.ModuleUtils
+   Found type 'com.google.gwt.lang.ModuleUtils'
+      Resolving method <init>
+Resolving com.google.gwt.lang.Runtime
+   Found type 'com.google.gwt.lang.Runtime'
+      Resolving method <init>
+      Resolving method toString
+      Resolving method bootstrap
+      Resolving method defineClass
+      Resolving method getClassPrototype
+Resolving com.google.gwt.lang.Stats
+   Found type 'com.google.gwt.lang.Stats'
+      Resolving method <init>
+Resolving com.google.gwt.lang.Util
+   Found type 'com.google.gwt.lang.Util'
+      Resolving method <init>
+Resolving java.io.Serializable
+Resolving java.lang.AssertionError
+   Found type 'java.lang.AssertionError'
+      Resolving method <init>
+Resolving java.lang.Boolean
+   Found type 'java.lang.Boolean'
+      Resolving method <init>
+Resolving java.lang.Byte
+   Found type 'java.lang.Byte'
+      Resolving method <init>
+Resolving java.lang.CharSequence
+Resolving java.lang.Character
+   Found type 'java.lang.Character'
+      Resolving method <init>
+Resolving java.lang.Class
+Resolving java.lang.Cloneable
+   Found type 'java.lang.Cloneable'
+Resolving java.lang.Comparable
+Resolving java.lang.Double
+   Found type 'java.lang.Double'
+      Resolving method <init>
+Resolving java.lang.Enum
+   Found type 'java.lang.Enum'
+      Resolving method <init>
+      Resolving method createValueOfMap
+      Resolving method ordinal
+      Resolving field ordinal
+Resolving java.lang.Float
+   Found type 'java.lang.Float'
+      Resolving method <init>
+Resolving java.lang.Integer
+   Found type 'java.lang.Integer'
+      Resolving method <init>
+      Resolving method toHexString
+      Resolving method toString
+Resolving java.lang.Iterable
+   Found type 'java.lang.Iterable'
+Resolving java.lang.Long
+   Found type 'java.lang.Long'
+      Resolving method <init>
+Resolving java.lang.Object
+Resolving java.lang.Short
+   Found type 'java.lang.Short'
+      Resolving method <init>
+Resolving java.lang.String
+Resolving java.lang.Throwable
+   Found type 'java.lang.Throwable'
+      Resolving method <init>
+Resolving java.util.Iterator
+   Found type 'java.util.Iterator'
+Resolving madonna.Madonna
+   Found type 'madonna.Madonna'
+      Resolving method <init>
+      Resolving method testMethod
+      Resolving method main
+      Resolving method onModuleLoad
+Finding entry point classes
+AST CRASH
+compilationState.getTypeOracle():com.google.gwt.dev.javac.typemodel.TypeOracle@2dde1bff
+Assimilating generated source
+   Generated source files...
+      com.google.gwt.lang.madonna__EntryMethodHolder
+Adding '1' new generated units
+   Compiling...
+      Compilation completed in 0.01 seconds
+   Removing invalidated units
+   Resolving enclosing classes
+   Resolving com.google.gwt.lang.madonna__EntryMethodHolder
+      Found type 'com.google.gwt.lang.madonna__EntryMethodHolder'
+         Resolving method <init>
+         Resolving method init
+unifyAst.exec():com.google.gwt.lang.madonna__EntryMethodHolder
+getIndexedMethod AObject.toString
+getIndexedMethod C after
+AFTER AST!
+PRECOMPILE SUCCESS!true
+COMPILING...
+Compiling 1 permutation
+   Creating worker permutation 0 of 1
+   Creating PermutationWorkerFactory instances
+      Factory impl property is com.google.gwt.dev.ThreadedPermutationWorkerFactory,com.google.gwt.dev.ExternalPermutationWorkerFactory
+      Added PermutationWorkerFactory com.google.gwt.dev.ThreadedPermutationWorkerFactory
+      Added PermutationWorkerFactory com.google.gwt.dev.ExternalPermutationWorkerFactory
+   Creating ThreadedPermutationWorkers
+   Compiling permutation 0...
+   [ERROR] An internal compiler exception occurred
+com.google.gwt.dev.jjs.InternalCompilerException: Unexpected error during visit.
+        at com.google.gwt.dev.jjs.ast.JVisitor.translateException(JVisitor.java:111)
+        at com.google.gwt.dev.jjs.ast.JVisitor.accept(JVisitor.java:130)
+        at com.google.gwt.dev.jjs.ast.JVisitor.accept(JVisitor.java:122)
+        at com.google.gwt.dev.jjs.ast.JTransformer.transform(JTransformer.java:1067)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.transformProgram(GenerateJavaScriptAST.java:1226)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.transformProgram(GenerateJavaScriptAST.java:517)
+        at com.google.gwt.dev.jjs.ast.JTransformer$JRewriterVisitor.visit(JTransformer.java:923)
+        at com.google.gwt.dev.jjs.ast.JProgram.traverse(JProgram.java:1248)
+        at com.google.gwt.dev.jjs.ast.JVisitor.accept(JVisitor.java:127)
+        at com.google.gwt.dev.jjs.ast.JVisitor.accept(JVisitor.java:122)
+        at com.google.gwt.dev.jjs.ast.JTransformer.transform(JTransformer.java:1067)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST.execImpl(GenerateJavaScriptAST.java:3062)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST.exec(GenerateJavaScriptAST.java:2835)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.compilePermutation(JavaToJavaScriptCompiler.java:378)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.compilePermutation(JavaToJavaScriptCompiler.java:272)
+        at com.google.gwt.dev.CompilePerms.compile(CompilePerms.java:198)
+        at com.google.gwt.dev.ThreadedPermutationWorkerFactory$ThreadedPermutationWorker.compile(ThreadedPermutationWorkerFactory.java:50)
+        at com.google.gwt.dev.PermutationWorkerFactory$Manager$WorkerThread.run(PermutationWorkerFactory.java:74)
+        at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NullPointerException
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.setupCastMapForUnboxedType(GenerateJavaScriptAST.java:2231)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.generateTypeSetup(GenerateJavaScriptAST.java:1851)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.transformDeclaredType(GenerateJavaScriptAST.java:642)
+        at com.google.gwt.dev.jjs.impl.GenerateJavaScriptAST$GenerateJavaScriptTransformer.transformDeclaredType(GenerateJavaScriptAST.java:517)
+        at com.google.gwt.dev.jjs.ast.JTransformer.transformClassType(JTransformer.java:95)
+        at com.google.gwt.dev.jjs.ast.JTransformer$JRewriterVisitor.visit(JTransformer.java:675)
+        at com.google.gwt.dev.jjs.ast.JClassType.traverse(JClassType.java:145)
+        at com.google.gwt.dev.jjs.ast.JVisitor.accept(JVisitor.java:127)
+        ... 17 more
+      [ERROR] at String.java(25): java.lang.String (final extends Object implements Comparable, CharSequence, Serializable)
+         com.google.gwt.dev.jjs.ast.JClassType
+      [ERROR] at Unknown(0): <JProgram>
+         com.google.gwt.dev.jjs.ast.JProgram
+   Permutation took 346 ms
+   [ERROR] Unrecoverable exception, shutting down
+com.google.gwt.core.ext.UnableToCompleteException: (see previous log entries)
+        at com.google.gwt.dev.javac.CompilationProblemReporter.logAndTranslateException(CompilationProblemReporter.java:106)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.compilePermutation(JavaToJavaScriptCompiler.java:459)
+        at com.google.gwt.dev.jjs.JavaToJavaScriptCompiler.compilePermutation(JavaToJavaScriptCompiler.java:272)
+        at com.google.gwt.dev.CompilePerms.compile(CompilePerms.java:198)
+        at com.google.gwt.dev.ThreadedPermutationWorkerFactory$ThreadedPermutationWorker.compile(ThreadedPermutationWorkerFactory.java:50)
+        at com.google.gwt.dev.PermutationWorkerFactory$Manager$WorkerThread.run(PermutationWorkerFactory.java:74)
+        at java.lang.Thread.run(Thread.java:745)
+   [ERROR] Not all permutation were compiled , completed (0/1)
+MODULEDEF LOAD FAILED com.google.gwt.core.ext.UnableToCompleteException: (see previous log entries)
+
